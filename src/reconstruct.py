@@ -2,12 +2,12 @@ import os
 import shutil
 import time
 
-rpgm_dirs = ["audio", "css", "data", "effects", "fonts", "icon", "img", "js", "movies"]
-rpgm_files = ["package.json"]
+from constants import *
 
+game_path = "files"
 
 def copy_files():
-    if os.path.exists("files"):
+    if os.path.exists(game_path): # This gotta be gone l8r!
         print("Deleting shitty directory")
         time.sleep(1)
         shutil.rmtree("files")
@@ -25,4 +25,7 @@ def copy_files():
         print("Copying directory:" + dir)
         shutil.copytree(source, dest)
 
-copy_files()
+def create_project_file():
+    project_file = os.path.join(game_path, mv_proj_filename)
+    with open(project_file, "w", encoding="utf-8") as file:
+        file.write(mv_proj_content)
