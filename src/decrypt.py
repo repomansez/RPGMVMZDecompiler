@@ -7,16 +7,18 @@ from constants import rpgm_encrypted_dirs
 
 # RPGM "encrypts" files by adding 16 bytes of junk at the start, then XORing the next 16 bits with an encryption key
 # if you remove the first 16 bytes and XOR the 16 next bytes again, you get the original file :)
-def get_enc_key():
+def get_enc_key(game_path):
+    mv_system_json = os.path.join(game_path, "data", "System.json")
     with open(mv_system_json, "r") as file:
         system_json = json.load(file)
         md5_hash = system_json["encryptionKey"]
         return bytes.fromhex(md5_hash)
 
-def decrypt_file(filepath, filedir, filextension):
-    key = get_enc_key()
+
+def decrypt_file(game_path, filepath, filedir, filextension):
+    key = get_enc_key(game_path)
     new_extension = mv_extension_map[filextension]
-    input_path = filepath
+   # input_path = filepath
     output_path = os.path.splitext(filepath)[0] + new_extension
 
     with open(file=filepath, mode="rb") as encrypted_file:
@@ -28,17 +30,20 @@ def decrypt_file(filepath, filedir, filextension):
 
     print(filepath, "decrypted.")
 
-def list_files():
+
+def list_files(game_path):
     for directory in rpgm_encrypted_dirs:
         recurse_dir = os.path.join(game_path, directory)
         for root, dirs, files in os.walk(recurse_dir):
             for f in files:
-                file_dir  = root
+                file_dir = root
                 file_path = os.path.join(root, f)
-                file_name = f
+               # file_name = f
                 file_extension = os.path.splitext(f)[1]
                 if file_extension in mv_extension_map:
-                    #print("decrypting file: ", file_path, file_name, root)
-                    decrypt_file(file_path, file_dir, file_extension)
+                    # print("decrypting file: ", file_path, file_name, root)
+                    decrypt_file(game_path, file_path, file_dir, file_extension)
 
-list_files()
+
+def decrypt(game_path):
+    list_files(game_path)
