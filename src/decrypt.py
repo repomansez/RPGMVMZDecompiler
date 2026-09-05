@@ -15,7 +15,7 @@ def get_enc_key(game_path):
         return bytes.fromhex(md5_hash)
 
 
-def decrypt_file(game_path, filepath, filedir, filextension):
+def decrypt_file_mv(game_path, filepath, filedir, filextension):
     key = get_enc_key(game_path)
     new_extension = mv_extension_map[filextension]
    # input_path = filepath
@@ -31,7 +31,7 @@ def decrypt_file(game_path, filepath, filedir, filextension):
     print(filepath, "decrypted.")
 
 
-def list_files(game_path):
+def list_files_mv(game_path):
     for directory in rpgm_encrypted_dirs:
         recurse_dir = os.path.join(game_path, directory)
         for root, dirs, files in os.walk(recurse_dir):
@@ -44,6 +44,38 @@ def list_files(game_path):
                     # print("decrypting file: ", file_path, file_name, root)
                     decrypt_file(game_path, file_path, file_dir, file_extension)
 
+def decrypt_file_mz(game_path, filepath, filedir, filextension):
+    key = get_enc_key(game_path)
+    new_extension = mz_extension_map[filextension]
+   # input_path = filepath
+    output_path = os.path.splitext(filepath)[0] + new_extension
 
-def decrypt(game_path):
-    list_files(game_path)
+    with open(file=filepath, mode="rb") as encrypted_file:
+        output: bytearray = bytearray(encrypted_file.read()[16:])
+    for i in range(16):
+        output[i] ^= key[i]
+    with open(file=output_path, mode="wb") as file:
+        file.write(output)
+
+    print(filepath, "decrypted.")
+
+
+def list_files_mz(game_path):
+    for directory in rpgm_encrypted_dirs:
+        recurse_dir = os.path.join(game_path, directory)
+        for root, dirs, files in os.walk(recurse_dir):
+            for f in files:
+                file_dir = root
+                file_path = os.path.join(root, f)
+               # file_name = f
+                file_extension = os.path.splitext(f)[1]
+                if file_extension in mz_extension_map:
+                    # print("decrypting file: ", file_path, file_name, root)
+                    decrypt_file_mz(game_path, file_path, file_dir, file_extension)
+
+
+def decrypt_mv(game_path):
+    list_files_mv(game_path)
+
+def decrypt_mz(game_path):
+    list_files_mz(game_path)

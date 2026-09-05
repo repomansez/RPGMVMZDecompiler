@@ -1,8 +1,6 @@
 # Things that don't change, like war
 import os
 
-#from reconstruct import game_path
-
 ## MV EXCLUSIVE ##################################################################
 mv_extension_map = {".rpgmvo": ".ogg", ".rpgmvp": ".png", ".rpgmvm": ".m4a"}
 
@@ -11,10 +9,10 @@ mv_proj_content = "RPGMV 1.6.3"
 ##################################################################################
 
 ## MZ EXCLUSIVE ##################################################################
-mv_extension_map = {".rpgmvo": ".ogg", ".rpgmvp": ".png", ".rpgmvm": ".m4a"}
+mz_extension_map = {".ogg_": ".ogg", ".png_": ".png", ".m4a_": ".m4a"}
 
-mv_proj_filename = "Game.rmmzproject"
-mv_proj_content = "RPGMZ 1.8.0"
+mz_proj_filename = "Game.rmmzproject"
+mz_proj_content = "RPGMZ 1.8.0"
 ##################################################################################
 
 rpgm_dirs = ["audio", "css", "data", "effects", "fonts", "icon", "img", "js", "movies"]
