@@ -21,18 +21,19 @@ def copy_files(old_gamepath, game_path, rpgm_version):
     if os.path.exists(game_path):  # This gotta be gone l8r!
         print("Deleting shitty directory")
         time.sleep(1)
-        shutil.rmtree("files")
-        os.mkdir("files")
+        shutil.rmtree(game_path)
+        os.mkdir(game_path)
     else:
-        os.mkdir("files")
+        os.mkdir(game_path)
 
     for dir in rpgm_dirs:
         if rpgm_version == "MV":
-            source = os.path.join("game", "www", dir)
-            dest = os.path.join("files", dir)
+            source = os.path.join(old_gamepath, "www", dir)
+            dest = os.path.join(game_path, dir)
         elif rpgm_version == "MZ":
-            source = os.path.join("game", dir)
-            dest = os.path.join("files", dir)
+            source = os.path.join(old_gamepath, dir)
+            dest = os.path.join(game_path, dir)
+            print("source: ", source, "dest: ", dest)
 
         if not os.path.isdir(source):
             print("Skipping missing directory:", dir)

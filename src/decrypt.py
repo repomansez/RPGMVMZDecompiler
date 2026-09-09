@@ -1,6 +1,8 @@
 import json
 import os
 
+
+from sys import exit
 from constants import *
 from constants import rpgm_encrypted_dirs
 
@@ -20,6 +22,7 @@ def decrypt_file_mv(game_path, filepath, filedir, filextension):
     new_extension = mv_extension_map[filextension]
    # input_path = filepath
     output_path = os.path.splitext(filepath)[0] + new_extension
+    print("FILEPATH: ", filepath)
 
     with open(file=filepath, mode="rb") as encrypted_file:
         output: bytearray = bytearray(encrypted_file.read()[16:])
@@ -42,7 +45,7 @@ def list_files_mv(game_path):
                 file_extension = os.path.splitext(f)[1]
                 if file_extension in mv_extension_map:
                     # print("decrypting file: ", file_path, file_name, root)
-                    decrypt_file(game_path, file_path, file_dir, file_extension)
+                    decrypt_file_mv(game_path, file_path, file_dir, file_extension)
 
 def decrypt_file_mz(game_path, filepath, filedir, filextension):
     key = get_enc_key(game_path)
@@ -75,7 +78,16 @@ def list_files_mz(game_path):
 
 
 def decrypt_mv(game_path):
-    list_files_mv(game_path)
+    try:
+        list_files_mv(game_path)
+    except IndexError:
+        print("Index Error! Gamefiles are likely corrupted.")
+        exit(1)
 
 def decrypt_mz(game_path):
-    list_files_mz(game_path)
+    try:
+        list_files_mz(game_path)
+    except IndexError:
+        print("Index Error! Gamefiles are likely corrupted.")
+        exit(1)
+
