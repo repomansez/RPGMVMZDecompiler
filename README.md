@@ -7,4 +7,4 @@ This tool was heavily inspired by uuksu's tool, which is written in the shit ass
 # How to use
 it's easy you dipshit, just run
 
-python3 main.py GAME_DIRECTORY
+python3 main.py GAME_DIRECTORY GAME_PROJECT_DESTINATION
